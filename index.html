@@ -40,7 +40,6 @@
     };
   </script>
 
-  <!-- PWA Manifest -->
   <link rel="manifest" id="manifest-placeholder" />
 
   <style>
@@ -55,13 +54,21 @@
     .safe-top { padding-top: max(14px, var(--sat)); }
     .safe-bottom { padding-bottom: max(14px, var(--sab)); }
 
-    /* Custom iOS-like slim scrollbars */
+    /* Fix Tailwind display override clashes */
+    .app-hidden {
+      display: none !important;
+    }
+    .app-flex {
+      display: flex !important;
+    }
+
+    /* Scrollbars */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(142, 142, 147, 0.3); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(142, 142, 147, 0.5); }
 
-    /* Typing pulse animation */
+    /* Typing pulse */
     @keyframes dotPulse {
       0%, 80%, 100% { transform: scale(0.6); opacity: 0.35; }
       40% { transform: scale(1.05); opacity: 1; }
@@ -78,7 +85,7 @@
 <body class="h-full bg-ios-lightBg dark:bg-ios-darkBg text-neutral-900 dark:text-neutral-100 font-sans antialiased overflow-hidden transition-colors duration-200">
 
   <!-- ==================== MAIN APP CONTAINER ==================== -->
-  <div id="app" class="h-dvh flex flex-col w-full max-w-lg mx-auto relative overflow-hidden bg-ios-lightBg dark:bg-ios-darkBg sm:border-x sm:border-ios-lightBorder sm:dark:border-ios-darkBorder shadow-2xl">
+  <div id="app" class="h-[100dvh] flex flex-col w-full max-w-lg mx-auto relative overflow-hidden bg-ios-lightBg dark:bg-ios-darkBg sm:border-x sm:border-ios-lightBorder sm:dark:border-ios-darkBorder shadow-2xl">
     
     <!-- ==================== VIEW 1: BOT DIRECTORY ==================== -->
     <section id="view-bots" class="flex-1 flex flex-col h-full w-full overflow-hidden">
@@ -91,13 +98,13 @@
         
         <div class="flex items-center gap-2">
           <!-- Theme Toggle -->
-          <button id="btn-toggle-theme" aria-label="Toggle Theme" class="p-2.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 active:scale-90 transition-transform cursor-pointer">
-            <span id="theme-icon-sun" class="hidden text-sm leading-none">☀️</span>
+          <button type="button" id="btn-toggle-theme" aria-label="Toggle Theme" class="p-2.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 active:scale-90 transition-transform cursor-pointer">
+            <span id="theme-icon-sun" class="app-hidden text-sm leading-none">☀️</span>
             <span id="theme-icon-moon" class="text-sm leading-none">🌙</span>
           </button>
 
           <!-- Settings -->
-          <button id="btn-open-settings" aria-label="Settings" class="p-2.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 active:scale-90 transition-transform cursor-pointer">
+          <button type="button" id="btn-open-settings" aria-label="Settings" class="p-2.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 active:scale-90 transition-transform cursor-pointer">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -105,7 +112,7 @@
           </button>
 
           <!-- Create Button -->
-          <button id="btn-create-bot" class="flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-ios-blue text-white text-xs font-bold active:scale-95 transition-transform shadow-sm cursor-pointer">
+          <button type="button" id="btn-create-bot" class="flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-ios-blue text-white text-xs font-bold active:scale-95 transition-transform shadow-sm cursor-pointer">
             <svg class="w-3.5 h-3.5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
             </svg>
@@ -114,7 +121,7 @@
         </div>
       </header>
 
-      <!-- Search Input -->
+      <!-- Search Bar -->
       <div class="px-4 py-2.5">
         <div class="relative flex items-center">
           <svg class="w-4 h-4 absolute left-3.5 text-ios-gray pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,23 +133,23 @@
 
       <!-- Character List -->
       <main id="bot-list-container" class="flex-1 overflow-y-auto px-4 py-2 space-y-2.5 pb-24">
-        <!-- Rendered dynamically -->
+        <!-- Rendered by JavaScript -->
       </main>
     </section>
 
     <!-- ==================== VIEW 2: CHAT INTERFACE ==================== -->
-    <section id="view-chat" class="hidden flex-1 flex flex-col h-full w-full overflow-hidden bg-white dark:bg-black">
+    <section id="view-chat" class="app-hidden flex-1 flex flex-col h-full w-full overflow-hidden bg-white dark:bg-black">
       <!-- Chat Navbar -->
       <header class="safe-top px-3 pb-2.5 flex items-center justify-between border-b border-ios-lightBorder dark:border-ios-darkBorder bg-ios-lightBg/95 dark:bg-ios-darkBg/95 backdrop-blur-xl z-20">
-        <button id="btn-chat-back" class="flex items-center text-ios-blue font-semibold active:opacity-50 transition-opacity pr-2 py-1 cursor-pointer">
+        <button type="button" id="btn-chat-back" class="flex items-center text-ios-blue font-semibold active:opacity-50 transition-opacity pr-2 py-1 cursor-pointer">
           <svg class="w-5 h-5 -ml-1 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
           </svg>
-          <span class="text-xs font-bold">Characters</span>
+          <span class="text-xs font-bold">Back</span>
         </button>
 
         <!-- Bot Identity -->
-        <div class="flex items-center gap-2 max-w-[55%] truncate cursor-pointer select-none" id="btn-chat-header-info" title="Click to view & edit character">
+        <div class="flex items-center gap-2 max-w-[55%] truncate cursor-pointer select-none" id="btn-chat-header-info">
           <div id="chat-header-avatar" class="w-8 h-8 rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-800 flex-shrink-0 flex items-center justify-center font-bold text-xs text-white"></div>
           <div class="truncate text-left">
             <h2 id="chat-header-name" class="text-xs font-bold truncate leading-tight">Bot</h2>
@@ -150,33 +157,32 @@
           </div>
         </div>
 
-        <!-- Chat Dropdown Trigger -->
+        <!-- Chat Options -->
         <div class="relative">
-          <button id="btn-chat-options" aria-label="Menu" class="p-1.5 text-ios-blue active:opacity-50 cursor-pointer">
+          <button type="button" id="btn-chat-options" aria-label="Menu" class="p-1.5 text-ios-blue active:opacity-50 cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
             </svg>
           </button>
           
-          <!-- Dropdown Menu -->
-          <div id="chat-dropdown-menu" class="hidden absolute right-0 mt-1.5 w-48 rounded-2xl bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl shadow-2xl border border-neutral-200 dark:border-neutral-800 py-1.5 z-50 text-xs">
-            <button id="menu-edit-bot" class="w-full text-left px-4 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-2 cursor-pointer font-medium">
+          <div id="chat-dropdown-menu" class="app-hidden absolute right-0 mt-1.5 w-44 rounded-2xl bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl shadow-2xl border border-neutral-200 dark:border-neutral-800 py-1 z-50 text-xs">
+            <button type="button" id="menu-edit-bot" class="w-full text-left px-3.5 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-2 cursor-pointer font-medium">
               <span>✏️ Edit Persona</span>
             </button>
-            <button id="menu-clear-chat" class="w-full text-left px-4 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-ios-red flex items-center gap-2 border-t border-neutral-100 dark:border-neutral-800 cursor-pointer font-medium">
+            <button type="button" id="menu-clear-chat" class="w-full text-left px-3.5 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-ios-red flex items-center gap-2 border-t border-neutral-100 dark:border-neutral-800 cursor-pointer font-medium">
               <span>🗑️ Clear History</span>
             </button>
           </div>
         </div>
       </header>
 
-      <!-- Messages Stream Area -->
+      <!-- Messages Stream -->
       <main id="chat-messages-container" class="flex-1 overflow-y-auto px-4 py-4 space-y-4 select-text">
-        <!-- Messages dynamically injected -->
+        <!-- Injected dynamically -->
       </main>
 
-      <!-- Animated Typing Dots -->
-      <div id="typing-indicator" class="hidden px-4 py-1.5 flex items-center gap-2 text-xs text-ios-gray">
+      <!-- Typing Indicator -->
+      <div id="typing-indicator" class="app-hidden px-4 py-1.5 flex items-center gap-2 text-xs text-ios-gray">
         <div class="px-3 py-2 rounded-2xl bg-ios-lightBubble dark:bg-ios-darkBubble inline-flex items-center gap-1 shadow-sm">
           <span class="w-1.5 h-1.5 rounded-full bg-ios-gray dot-1"></span>
           <span class="w-1.5 h-1.5 rounded-full bg-ios-gray dot-2"></span>
@@ -191,12 +197,11 @@
             <textarea id="chat-textarea" rows="1" placeholder="Type a message..." class="w-full bg-transparent text-sm resize-none focus:outline-none max-h-32 leading-5 text-neutral-900 dark:text-neutral-100 placeholder-ios-gray"></textarea>
           </div>
           
-          <!-- Send / Stop Button -->
           <button type="submit" id="btn-send-message" disabled class="p-2.5 rounded-full bg-ios-blue text-white disabled:opacity-40 disabled:pointer-events-none active:scale-95 transition-all flex-shrink-0 cursor-pointer shadow-md">
             <svg id="icon-send" class="w-4 h-4 translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
-            <svg id="icon-stop" class="w-4 h-4 hidden fill-current" viewBox="0 0 24 24">
+            <svg id="icon-stop" class="w-4 h-4 app-hidden fill-current" viewBox="0 0 24 24">
               <rect x="6" y="6" width="12" height="12" rx="2"></rect>
             </svg>
           </button>
@@ -204,23 +209,21 @@
       </footer>
     </section>
 
-    <!-- ==================== MODAL: PERSONA CREATOR / EDITOR ==================== -->
-    <div id="modal-bot-editor" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
-      <div class="w-full max-w-lg bg-ios-lightBg dark:bg-neutral-900 rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-200/50 dark:border-neutral-800 animate-in fade-in">
+    <!-- ==================== MODAL: PERSONA EDITOR ==================== -->
+    <div id="modal-bot-editor" class="app-hidden fixed inset-0 z-50 items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div class="w-full max-w-lg bg-ios-lightBg dark:bg-neutral-900 rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-200/50 dark:border-neutral-800">
         
-        <!-- Modal Header -->
         <div class="px-4 py-3 border-b border-ios-lightBorder dark:border-ios-darkBorder flex items-center justify-between bg-white dark:bg-neutral-900 sticky top-0 z-10">
           <button type="button" id="btn-cancel-bot-edit" class="text-xs font-semibold text-ios-blue cursor-pointer py-1 px-2">Cancel</button>
           <h3 id="modal-bot-title" class="text-sm font-bold">New Character</h3>
           <button type="button" id="btn-save-bot" class="text-xs font-bold text-ios-blue cursor-pointer py-1 px-2">Save</button>
         </div>
 
-        <!-- Form Scrollable Body -->
         <div class="flex-1 overflow-y-auto p-4 space-y-4">
           <!-- Avatar Customization -->
           <div class="flex flex-col items-center justify-center py-1">
             <input type="file" id="bot-avatar-file-input" accept="image/*" class="hidden" />
-            <div class="relative cursor-pointer group" id="avatar-picker-trigger" title="Upload custom picture">
+            <div class="relative cursor-pointer group" id="avatar-picker-trigger" title="Upload custom photo">
               <div id="bot-avatar-preview" class="w-16 h-16 rounded-full bg-gradient-to-tr from-ios-blue to-purple-600 text-white flex items-center justify-center font-bold text-2xl shadow-md overflow-hidden ring-4 ring-white dark:ring-neutral-800">
                 <span>🤖</span>
               </div>
@@ -247,19 +250,19 @@
             </div>
           </div>
 
-          <!-- System Prompt -->
+          <!-- System Instructions -->
           <div class="bg-white dark:bg-neutral-800 rounded-2xl p-3 border border-neutral-200 dark:border-neutral-700">
             <label class="block text-[10px] font-bold text-ios-gray uppercase tracking-wider mb-1">System Instructions (Personality)</label>
-            <textarea id="bot-prompt-input" rows="4" placeholder="Describe how this character speaks, their knowledge, mannerisms, and rules..." class="w-full bg-transparent text-sm resize-none focus:outline-none text-neutral-900 dark:text-neutral-100 placeholder-ios-gray"></textarea>
+            <textarea id="bot-prompt-input" rows="4" placeholder="Describe how this character speaks, their background, knowledge, and demeanor..." class="w-full bg-transparent text-sm resize-none focus:outline-none text-neutral-900 dark:text-neutral-100 placeholder-ios-gray"></textarea>
           </div>
 
-          <!-- Quick Starter Archetypes -->
+          <!-- Quick Archetypes -->
           <div class="space-y-1.5">
             <span class="text-[10px] font-bold text-ios-gray uppercase tracking-wider ml-1">Starter Archetypes</span>
             <div class="flex gap-2 flex-wrap">
-              <button type="button" class="btn-quick-archetype text-xs px-3 py-1.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 font-medium active:scale-95 transition-transform" data-avatar="🏛️" data-name="Marcus Aurelius" data-tagline="Stoic Emperor &amp; Sage" data-prompt="You are Marcus Aurelius, Roman Emperor and Stoic author of Meditations. Offer stoic wisdom and tranquil, grounded perspective." data-temp="0.6">🏛️ Stoic Sage</button>
-              <button type="button" class="btn-quick-archetype text-xs px-3 py-1.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 font-medium active:scale-95 transition-transform" data-avatar="💻" data-name="Nova Code" data-tagline="Senior Software Architect" data-prompt="You are Nova, an elite senior software architect. Provide clean, modular code and crisp technical explanations with modern best practices." data-temp="0.2">💻 Tech Architect</button>
-              <button type="button" class="btn-quick-archetype text-xs px-3 py-1.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 font-medium active:scale-95 transition-transform" data-avatar="✨" data-name="Lyra" data-tagline="Creative Sci-Fi Novelist" data-prompt="You are Lyra, a world-building sci-fi novelist. Write vivid, imaginative, and atmospheric narratives." data-temp="1.1">✨ Sci-Fi Author</button>
+              <button type="button" class="btn-quick-archetype text-xs px-3 py-1.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 font-medium active:scale-95 transition-transform cursor-pointer" data-avatar="🏛️" data-name="Marcus Aurelius" data-tagline="Stoic Emperor &amp; Sage" data-prompt="You are Marcus Aurelius, Roman Emperor and Stoic author of Meditations. Offer stoic wisdom and tranquil perspective." data-temp="0.6">🏛️ Stoic Sage</button>
+              <button type="button" class="btn-quick-archetype text-xs px-3 py-1.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 font-medium active:scale-95 transition-transform cursor-pointer" data-avatar="💻" data-name="Nova Code" data-tagline="Senior Software Architect" data-prompt="You are Nova, an elite senior software architect. Provide clean, modular code and crisp technical solutions." data-temp="0.2">💻 Tech Architect</button>
+              <button type="button" class="btn-quick-archetype text-xs px-3 py-1.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 font-medium active:scale-95 transition-transform cursor-pointer" data-avatar="✨" data-name="Lyra" data-tagline="Creative Sci-Fi Novelist" data-prompt="You are Lyra, a world-building sci-fi novelist. Write vivid, imaginative, and evocative scenes." data-temp="1.1">✨ Sci-Fi Author</button>
             </div>
           </div>
 
@@ -271,7 +274,6 @@
               <datalist id="model-suggestions">
                 <option value="gpt-4o-mini">GPT-4o Mini</option>
                 <option value="gpt-4o">GPT-4o</option>
-                <option value="gpt-4-turbo">GPT-4 Turbo</option>
                 <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
                 <option value="deepseek-chat">DeepSeek Chat</option>
               </datalist>
@@ -288,7 +290,7 @@
           </div>
 
           <!-- Delete Bot Action -->
-          <div id="delete-bot-action-container" class="hidden pt-1">
+          <div id="delete-bot-action-container" class="app-hidden pt-1">
             <button type="button" id="btn-delete-bot" class="w-full py-2.5 rounded-2xl text-ios-red font-bold bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 active:opacity-70 text-xs cursor-pointer">
               Delete Character
             </button>
@@ -298,8 +300,8 @@
     </div>
 
     <!-- ==================== MODAL: SETTINGS ==================== -->
-    <div id="modal-settings" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
-      <div class="w-full max-w-lg bg-ios-lightBg dark:bg-neutral-900 rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-200/50 dark:border-neutral-800 animate-in fade-in">
+    <div id="modal-settings" class="app-hidden fixed inset-0 z-50 items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div class="w-full max-w-lg bg-ios-lightBg dark:bg-neutral-900 rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-200/50 dark:border-neutral-800">
         
         <div class="px-4 py-3 border-b border-ios-lightBorder dark:border-ios-darkBorder flex items-center justify-between bg-white dark:bg-neutral-900">
           <h3 class="text-sm font-bold">Settings</h3>
@@ -321,20 +323,17 @@
             <div>
               <label class="text-[10px] font-bold text-ios-gray uppercase tracking-wider block mb-1">API Base URL (Optional)</label>
               <input type="text" id="input-api-base" placeholder="https://api.openai.com/v1" class="w-full bg-neutral-100 dark:bg-neutral-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-ios-blue font-mono" />
-              <p class="text-[10px] text-ios-gray mt-1 leading-relaxed">
-                Compatible with OpenRouter, Groq, DeepSeek, or local Ollama proxies.
-              </p>
             </div>
           </div>
 
           <!-- Backup & Data Export -->
           <div class="bg-white dark:bg-neutral-800 rounded-2xl p-3.5 border border-neutral-200 dark:border-neutral-700 space-y-2.5">
-            <label class="text-[10px] font-bold text-ios-gray uppercase tracking-wider block">Data Management</label>
+            <label class="text-[10px] font-bold text-ios-gray uppercase tracking-wider block">Backup &amp; Restore</label>
             <div class="grid grid-cols-2 gap-2">
-              <button type="button" id="btn-export-backup" class="py-2 px-3 rounded-xl bg-neutral-100 dark:bg-neutral-700 font-bold text-neutral-800 dark:text-neutral-200 active:scale-95 text-[11px] transition-transform">
+              <button type="button" id="btn-export-backup" class="py-2 px-3 rounded-xl bg-neutral-100 dark:bg-neutral-700 font-bold text-neutral-800 dark:text-neutral-200 active:scale-95 text-[11px] transition-transform cursor-pointer">
                 📤 Export Backup
               </button>
-              <button type="button" id="btn-import-backup-trigger" class="py-2 px-3 rounded-xl bg-neutral-100 dark:bg-neutral-700 font-bold text-neutral-800 dark:text-neutral-200 active:scale-95 text-[11px] transition-transform">
+              <button type="button" id="btn-import-backup-trigger" class="py-2 px-3 rounded-xl bg-neutral-100 dark:bg-neutral-700 font-bold text-neutral-800 dark:text-neutral-200 active:scale-95 text-[11px] transition-transform cursor-pointer">
                 📥 Import Backup
               </button>
               <input type="file" id="input-import-backup" accept=".json" class="hidden" />
@@ -351,7 +350,7 @@
       </div>
     </div>
 
-    <!-- ==================== FLOATING TOAST NOTIFICATION ==================== -->
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
     <div id="toast" class="pointer-events-none fixed top-4 inset-x-0 mx-auto max-w-xs z-50 transform -translate-y-16 opacity-0 transition-all duration-300 flex items-center justify-center">
       <div class="bg-neutral-900/95 dark:bg-white/95 text-white dark:text-neutral-900 text-xs font-bold px-4 py-2 rounded-full shadow-2xl backdrop-blur-md">
         <span id="toast-message">Notification</span>
@@ -360,11 +359,11 @@
 
   </div>
 
-  <!-- ==================== APPLICATION LOGIC ==================== -->
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
   <script>
-    const STORAGE_KEY_BOTS = 'aistudio_bots_v3';
-    const STORAGE_KEY_CHATS = 'aistudio_chats_v3';
-    const STORAGE_KEY_SETTINGS = 'aistudio_settings_v3';
+    const STORAGE_KEY_BOTS = 'aistudio_bots_v4';
+    const STORAGE_KEY_CHATS = 'aistudio_chats_v4';
+    const STORAGE_KEY_SETTINGS = 'aistudio_settings_v4';
 
     const DEFAULT_BOTS = [
       {
@@ -415,7 +414,24 @@
 
     let activeAbortController = null;
 
-    /* ==================== INITIALIZATION ==================== */
+    /* ==================== DISPLAY UTILS ==================== */
+    function show(el) {
+      if (typeof el === 'string') el = document.getElementById(el);
+      if (el) {
+        el.classList.remove('app-hidden');
+        el.classList.add('app-flex');
+      }
+    }
+
+    function hide(el) {
+      if (typeof el === 'string') el = document.getElementById(el);
+      if (el) {
+        el.classList.remove('app-flex');
+        el.classList.add('app-hidden');
+      }
+    }
+
+    /* ==================== INIT ==================== */
     function initApp() {
       loadState();
       applyTheme();
@@ -437,12 +453,12 @@
 
         if (state.bots.length > 0 && Object.keys(state.chats).length === 0) {
           state.chats['bot-socrates'] = [
-            { id: 'init-1', role: 'assistant', content: 'Greetings! What question shall we examine together today?', timestamp: Date.now() }
+            { id: 'init-1', role: 'assistant', content: 'Greetings! What philosophical question shall we examine together today?', timestamp: Date.now() }
           ];
           saveChats();
         }
       } catch (err) {
-        console.error('Storage parse error:', err);
+        console.error('Storage error:', err);
       }
     }
 
@@ -450,7 +466,7 @@
     function saveChats() { localStorage.setItem(STORAGE_KEY_CHATS, JSON.stringify(state.chats)); }
     function saveSettings() { localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(state.settings)); }
 
-    /* ==================== THEME & PWA ==================== */
+    /* ==================== THEME ==================== */
     function applyTheme() {
       const html = document.documentElement;
       const metaTheme = document.getElementById('meta-theme-color');
@@ -460,13 +476,13 @@
       if (state.settings.theme === 'dark') {
         html.classList.add('dark');
         if (metaTheme) metaTheme.setAttribute('content', '#000000');
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
+        sunIcon.classList.remove('app-hidden');
+        moonIcon.classList.add('app-hidden');
       } else {
         html.classList.remove('dark');
         if (metaTheme) metaTheme.setAttribute('content', '#F2F2F7');
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
+        sunIcon.classList.add('app-hidden');
+        moonIcon.classList.remove('app-hidden');
       }
     }
 
@@ -484,12 +500,7 @@
         start_url: './',
         display: 'standalone',
         background_color: '#000000',
-        theme_color: '#007AFF',
-        icons: [{
-          src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="%23007AFF"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="52">🤖</text></svg>',
-          sizes: '192x192 512x512',
-          type: 'image/svg+xml'
-        }]
+        theme_color: '#007AFF'
       };
       const manifestStr = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
       document.getElementById('manifest-placeholder').setAttribute('href', manifestStr);
@@ -497,16 +508,13 @@
 
     /* ==================== NAVIGATION ==================== */
     function switchView(viewName) {
-      const viewBots = document.getElementById('view-bots');
-      const viewChat = document.getElementById('view-chat');
-
       if (viewName === 'chat') {
-        viewBots.classList.add('hidden');
-        viewChat.classList.remove('hidden');
+        hide('view-bots');
+        show('view-chat');
         renderActiveChat();
       } else {
-        viewChat.classList.add('hidden');
-        viewBots.classList.remove('hidden');
+        hide('view-chat');
+        show('view-bots');
         state.activeBotId = null;
         renderBotList();
       }
@@ -544,29 +552,22 @@
 
         return `
           <div class="bot-card group flex items-center gap-3.5 p-3 rounded-2xl bg-white dark:bg-ios-darkCard border border-neutral-200/80 dark:border-ios-darkBorder shadow-sm active:scale-[0.98] transition-all cursor-pointer" data-id="${bot.id}">
-            <div class="w-11 h-11 rounded-full flex-shrink-0 bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-lg shadow-inner overflow-hidden border border-neutral-200 dark:border-neutral-700">
+            <div class="w-11 h-11 rounded-full flex-shrink-0 bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-lg shadow-inner overflow-hidden border border-neutral-200 dark:border-neutral-700 pointer-events-none">
               ${avatarHTML}
             </div>
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-0 pointer-events-none">
               <div class="flex items-center justify-between">
                 <h3 class="text-sm font-bold truncate">${escapeHtml(bot.name)}</h3>
                 <span class="text-[10px] text-ios-gray font-mono">${escapeHtml(bot.model || 'gpt-4o-mini')}</span>
               </div>
               <p class="text-xs text-ios-gray truncate mt-0.5">${escapeHtml(lastMsg)}</p>
             </div>
-            <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-600 flex-shrink-0 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
             </svg>
           </div>
         `;
       }).join('');
-
-      container.querySelectorAll('.bot-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const botId = card.getAttribute('data-id');
-          openBotChat(botId);
-        });
-      });
     }
 
     function openBotChat(botId) {
@@ -642,7 +643,7 @@
       }
     }
 
-    /* ==================== STREAMING & API CALLS ==================== */
+    /* ==================== API STREAMING ==================== */
     async function handleSendMessage(e) {
       if (e) e.preventDefault();
 
@@ -692,7 +693,7 @@
 
       state.isStreaming = true;
       updateSendButtonState();
-      typingIndicator.classList.remove('hidden');
+      show(typingIndicator);
       scrollToBottom();
 
       const assistantMsgId = 'msg-' + Date.now();
@@ -727,7 +728,7 @@
           throw new Error(errData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
         }
 
-        typingIndicator.classList.add('hidden');
+        hide(typingIndicator);
 
         const newMsgObj = {
           id: assistantMsgId,
@@ -737,7 +738,6 @@
         };
         state.chats[bot.id].push(newMsgObj);
 
-        // Append assistant message shell
         const wrapper = document.createElement('div');
         wrapper.innerHTML = renderMessageHTML(newMsgObj, bot);
         const msgElement = wrapper.firstElementChild;
@@ -759,8 +759,7 @@
           for (const line of lines) {
             const cleanLine = line.trim();
             if (!cleanLine || cleanLine.startsWith(':')) continue;
-            trim();
-              if (dataStr === '[DONE]') break;
+            if (clean              if (dataStr === '[DONE]') break;
               try {
                 const parsed = JSON.parse(dataStr);
                 const delta = parsed.choices?.[0]?.delta?.content || '';
@@ -778,14 +777,14 @@
         saveChats();
 
       } catch (error) {
-        typingIndicator.classList.add('hidden');
+        hide(typingIndicator);
         if (error.name === 'AbortError') {
-          showToast('Generation stopped');
+          showToast('Stopped generation');
         } else {
           const errorMsg = {
             id: 'err-' + Date.now(),
             role: 'assistant',
-            content: `⚠️ **API Error**: ${error.message}\n\nPlease check your API Key & endpoint in Settings.`,
+            content: `⚠️ **API Error**: ${error.message}\n\nPlease verify your API key in Settings.`,
             timestamp: Date.now()
           };
           state.chats[bot.id].push(errorMsg);
@@ -825,18 +824,18 @@
         sendBtn.disabled = false;
         sendBtn.classList.remove('bg-ios-blue');
         sendBtn.classList.add('bg-ios-red');
-        iconSend.classList.add('hidden');
-        iconStop.classList.remove('hidden');
+        hide(iconSend);
+        show(iconStop);
       } else {
         sendBtn.classList.add('bg-ios-blue');
         sendBtn.classList.remove('bg-ios-red');
-        iconSend.classList.remove('hidden');
-        iconStop.classList.add('hidden');
+        show(iconSend);
+        hide(iconStop);
         sendBtn.disabled = textarea.value.trim().length === 0;
       }
     }
 
-    /* ==================== MARKDOWN ENGINE ==================== */
+    /* ==================== MARKDOWN FORMATTER ==================== */
     function escapeHtml(str) {
       if (!str) return '';
       return String(str)
@@ -859,24 +858,15 @@
 
       text = escapeHtml(text);
 
-      // Blockquotes
       text = text.replace(/^>(.*)$/gm, '<blockquote class="border-l-2 border-ios-blue pl-2.5 my-1 text-neutral-500 dark:text-neutral-400 italic">$1</blockquote>');
-
-      // Bullet & numbered lists
       text = text.replace(/^\s*[\-\*]\s+(.*)$/gm, '<li class="ml-4 list-disc">$1</li>');
       text = text.replace(/^\s*(\d+)\.\s+(.*)$/gm, '<li class="ml-4 list-decimal">$2</li>');
-
-      // Inline formatting
       text = text.replace(/`([^`]+)`/g, '<code class="bg-neutral-200/80 dark:bg-neutral-800 text-ios-blue dark:text-blue-400 px-1 py-0.5 rounded text-xs font-mono">$1</code>');
       text = text.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
       text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
       text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-      text = text.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-      text = text.replace(/_([^_]+)_/g, '<em>$1</em>');
-
       text = text.replace(/\n/g, '<br/>');
 
-      // Reinsert Code Blocks
       codeBlocks.forEach((item, index) => {
         const escapedCode = escapeHtml(item.code.trim());
         const langLabel = item.lang || 'code';
@@ -911,10 +901,9 @@
       });
     }
 
-    /* ==================== BOT EDITOR ==================== */
+    /* ==================== BOT EDITOR MODAL ==================== */
     function openBotEditor(botIdToEdit = null) {
       state.editingBotId = botIdToEdit;
-      const modal = document.getElementById('modal-bot-editor');
       const title = document.getElementById('modal-bot-title');
       const deleteBtnContainer = document.getElementById('delete-bot-action-container');
 
@@ -939,7 +928,7 @@
 
         state.tempAvatar = bot.avatar || '🤖';
         renderAvatarPreview(bot.avatar);
-        deleteBtnContainer.classList.remove('hidden');
+        show(deleteBtnContainer);
       } else {
         title.textContent = 'New Character';
         nameInput.value = '';
@@ -951,14 +940,14 @@
 
         state.tempAvatar = '🤖';
         renderAvatarPreview('🤖');
-        deleteBtnContainer.classList.add('hidden');
+        hide(deleteBtnContainer);
       }
 
-      modal.classList.remove('hidden');
+      show('modal-bot-editor');
     }
 
     function closeBotEditor() {
-      document.getElementById('modal-bot-editor').classList.add('hidden');
+      hide('modal-bot-editor');
       state.editingBotId = null;
     }
 
@@ -1035,7 +1024,7 @@
 
     function processImageUpload(file) {
       if (!file || !file.type.startsWith('image/')) {
-        showToast('Please select a valid image file');
+        showToast('Please select an image file');
         return;
       }
 
@@ -1067,22 +1056,22 @@
     function openSettingsModal() {
       document.getElementById('input-api-key').value = state.settings.apiKey || '';
       document.getElementById('input-api-base').value = state.settings.apiBase || 'https://api.openai.com/v1';
-      document.getElementById('modal-settings').classList.remove('hidden');
+      show('modal-settings');
     }
 
     function closeSettingsModal() {
       state.settings.apiKey = document.getElementById('input-api-key').value.trim();
       state.settings.apiBase = document.getElementById('input-api-base').value.trim() || 'https://api.openai.com/v1';
       saveSettings();
-      document.getElementById('modal-settings').classList.add('hidden');
+      hide('modal-settings');
       showToast('Settings saved');
     }
 
     function exportBackup() {
       const data = {
-        version: 3,
+        version: 4,
         exportDate: new Date().toISOString(),
-        settings: { ...state.settings, apiKey: '' }, // exclude sensitive key from exports
+        settings: { ...state.settings, apiKey: '' },
         bots: state.bots,
         chats: state.chats
       };
@@ -1110,16 +1099,16 @@
             saveChats();
           }
           renderBotList();
-          showToast('Backup imported successfully');
-          document.getElementById('modal-settings').classList.add('hidden');
+          showToast('Backup imported');
+          hide('modal-settings');
         } catch (err) {
-          showToast('Invalid backup JSON file');
+          showToast('Invalid backup file');
         }
       };
       reader.readAsText(file);
     }
 
-    /* ==================== TOAST NOTIFICATION ==================== */
+    /* ==================== TOAST ==================== */
     function showToast(msg) {
       const toast = document.getElementById('toast');
       document.getElementById('toast-message').textContent = msg;
@@ -1130,71 +1119,80 @@
       window._toastTimer = setTimeout(() => {
         toast.classList.add('-translate-y-16', 'opacity-0');
         toast.classList.remove('translate-y-0', 'opacity-100');
-      }, 2400);
+      }, 2300);
     }
 
     /* ==================== EVENT LISTENERS ==================== */
     function setupEventListeners() {
-      // Top Controls
-      document.getElementById('btn-toggle-theme').addEventListener('click', toggleTheme);
-      document.getElementById('btn-open-settings').addEventListener('click', openSettingsModal);
-      document.getElementById('btn-close-settings').addEventListener('click', closeSettingsModal);
-      document.getElementById('btn-create-bot').addEventListener('click', () => openBotEditor());
-      document.getElementById('btn-chat-back').addEventListener('click', () => switchView('list'));
+      // Header Buttons
+      document.getElementById('btn-toggle-theme').onclick = toggleTheme;
+      document.getElementById('btn-open-settings').onclick = openSettingsModal;
+      document.getElementById('btn-close-settings').onclick = closeSettingsModal;
+      document.getElementById('btn-create-bot').onclick = () => openBotEditor();
+      document.getElementById('btn-chat-back').onclick = () => switchView('list');
+
+      // Bot List Card Click (Event Delegation)
+      document.getElementById('bot-list-container').onclick = (e) => {
+        const card = e.target.closest('.bot-card');
+        if (card) {
+          const botId = card.getAttribute('data-id');
+          openBotChat(botId);
+        }
+      };
 
       // Search Filtering
-      document.getElementById('input-search-bots').addEventListener('input', (e) => {
+      document.getElementById('input-search-bots').oninput = (e) => {
         renderBotList(e.target.value);
-      });
+      };
 
-      // Composer Events
+      // Chat Form & Input
       const textarea = document.getElementById('chat-textarea');
-      document.getElementById('chat-form').addEventListener('submit', handleSendMessage);
+      document.getElementById('chat-form').onsubmit = handleSendMessage;
       
-      textarea.addEventListener('input', () => {
+      textarea.oninput = () => {
         textarea.style.height = 'auto';
         textarea.style.height = Math.min(textarea.scrollHeight, 128) + 'px';
         updateSendButtonState();
-      });
+      };
 
-      textarea.addEventListener('keydown', (e) => {
+      textarea.onkeydown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
           handleSendMessage();
         }
-      });
+      };
 
       // Temperature Slider
       const tempSlider = document.getElementById('bot-temp-slider');
-      tempSlider.addEventListener('input', (e) => {
+      tempSlider.oninput = (e) => {
         document.getElementById('temp-val-display').textContent = Number(e.target.value).toFixed(1);
-      });
+      };
 
       // Bot Modal Actions
-      document.getElementById('btn-cancel-bot-edit').addEventListener('click', closeBotEditor);
-      document.getElementById('btn-save-bot').addEventListener('click', saveBotFromEditor);
-      document.getElementById('btn-delete-bot').addEventListener('click', deleteCurrentBot);
+      document.getElementById('btn-cancel-bot-edit').onclick = closeBotEditor;
+      document.getElementById('btn-save-bot').onclick = saveBotFromEditor;
+      document.getElementById('btn-delete-bot').onclick = deleteCurrentBot;
 
       // Photo and Emoji Picker
       const fileInput = document.getElementById('bot-avatar-file-input');
       const pickPhoto = () => fileInput.click();
-      document.getElementById('avatar-picker-trigger').addEventListener('click', pickPhoto);
-      document.getElementById('btn-choose-photo').addEventListener('click', pickPhoto);
-      fileInput.addEventListener('change', (e) => {
+      document.getElementById('avatar-picker-trigger').onclick = pickPhoto;
+      document.getElementById('btn-choose-photo').onclick = pickPhoto;
+      fileInput.onchange = (e) => {
         if (e.target.files && e.target.files[0]) processImageUpload(e.target.files[0]);
-      });
+      };
 
-      document.getElementById('btn-pick-emoji').addEventListener('click', () => {
-        const emoji = prompt('Enter an emoji for this character:', state.tempAvatar || '🤖');
-        if (emoji) {
+      document.getElementById('btn-pick-emoji').onclick = () => {
+        const emoji = prompt('Enter an emoji icon:', state.tempAvatar || '🤖');
+        if (emoji && emoji.trim()) {
           state.tempAvatar = emoji.trim();
           renderAvatarPreview(state.tempAvatar);
         }
-      });
+      };
 
-      // Archetype Preset Clicks
+      // Quick Archetype Buttons
       document.querySelectorAll('.btn-quick-archetype').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.onclick = () => {
           document.getElementById('bot-name-input').value = btn.dataset.name;
           document.getElementById('bot-tagline-input').value = btn.dataset.tagline;
           document.getElementById('bot-prompt-input').value = btn.dataset.prompt;
@@ -1202,69 +1200,89 @@
           document.getElementById('temp-val-display').textContent = Number(btn.dataset.temp).toFixed(1);
           state.tempAvatar = btn.dataset.avatar || '🤖';
           renderAvatarPreview(state.tempAvatar);
-        });
+        };
       });
 
-      // Header Dropdown Menu
+      // Chat Dropdown Menu
       const menuBtn = document.getElementById('btn-chat-options');
       const dropdown = document.getElementById('chat-dropdown-menu');
-      menuBtn.addEventListener('click', (e) => {
+      
+      menuBtn.onclick = (e) => {
         e.stopPropagation();
-        dropdown.classList.toggle('hidden');
-      });
-      document.addEventListener('click', () => dropdown.classList.add('hidden'));
+        if (dropdown.classList.contains('app-hidden')) {
+          show(dropdown);
+        } else {
+          hide(dropdown);
+        }
+      };
 
-      document.getElementById('menu-edit-bot').addEventListener('click', () => {
-        dropdown.classList.add('hidden');
+      document.addEventListener('click', () => hide(dropdown));
+
+      document.getElementById('menu-edit-bot').onclick = () => {
+        hide(dropdown);
         openBotEditor(state.activeBotId);
-      });
-      document.getElementById('btn-chat-header-info').addEventListener('click', () => {
+      };
+
+      document.getElementById('btn-chat-header-info').onclick = () => {
         openBotEditor(state.activeBotId);
-      });
-      document.getElementById('menu-clear-chat').addEventListener('click', () => {
-        dropdown.classList.add('hidden');
+      };
+
+      document.getElementById('menu-clear-chat').onclick = () => {
+        hide(dropdown);
         if (state.activeBotId && confirm('Clear this conversation history?')) {
           state.chats[state.activeBotId] = [];
           saveChats();
           renderActiveChat();
           showToast('History cleared');
         }
-      });
+      };
 
       // Settings Key Eye Toggle
-      document.getElementById('btn-toggle-key-visibility').addEventListener('click', () => {
+      document.getElementById('btn-toggle-key-visibility').onclick = () => {
         const input = document.getElementById('input-api-key');
         input.type = input.type === 'password' ? 'text' : 'password';
-      });
+      };
 
-      // Backup Import / Export
-      document.getElementById('btn-export-backup').addEventListener('click', exportBackup);
+      // Backup Handlers
+      document.getElementById('btn-export-backup').onclick = exportBackup;
       const importInput = document.getElementById('input-import-backup');
-      document.getElementById('btn-import-backup-trigger').addEventListener('click', () => importInput.click());
-      importInput.addEventListener('change', (e) => {
+      document.getElementById('btn-import-backup-trigger').onclick = () => importInput.click();
+      importInput.onchange = (e) => {
         if (e.target.files && e.target.files[0]) importBackup(e.target.files[0]);
-      });
+      };
 
-      // Factory Reset
-      document.getElementById('btn-reset-all-data').addEventListener('click', () => {
-        if (confirm('Are you sure? This will delete all custom personas and chat records.')) {
+      // Reset All Data
+      document.getElementById('btn-reset-all-data').onclick = () => {
+        if (confirm('Factory reset? This will erase all personas and chat records.')) {
           localStorage.removeItem(STORAGE_KEY_BOTS);
           localStorage.removeItem(STORAGE_KEY_CHATS);
           localStorage.removeItem(STORAGE_KEY_SETTINGS);
           location.reload();
         }
-      });
+      };
 
-      // Dismiss Modals with ESC Key
+      // Backdrop dismissal for modals
+      document.getElementById('modal-bot-editor').onclick = (e) => {
+        if (e.target === document.getElementById('modal-bot-editor')) closeBotEditor();
+      };
+      document.getElementById('modal-settings').onclick = (e) => {
+        if (e.target === document.getElementById('modal-settings')) closeSettingsModal();
+      };
+
+      // ESC key handler
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           closeBotEditor();
-          document.getElementById('modal-settings').classList.add('hidden');
+          closeSettingsModal();
         }
       });
     }
 
-    document.addEventListener('DOMContentLoaded', initApp);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
   </script>
 </body>
 </html>
